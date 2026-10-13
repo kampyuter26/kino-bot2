@@ -8,22 +8,21 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-# Bot parametrlari
-TOKEN = "8758162405: AAGW3krs7B5UDtub2EyRg 4LJ_qSBnGu1go8"  # Tokeningiz o'zi turibdi
+# 1. Bot tokeningizni shu yerga yozasiz
+TOKEN = "8758162405: AAGW3krs7B5UDtub2EyRg 4LJ_qSBnGu1go8" 
 ADMIN_ID = 6522573426
 
+# Kanallar ro'yxati (agar bo'lsa)
 CHANNELS = [
     {"username": "@Turk_seriallar_uzbsub"},
-    {"username": "@luna_uzbsub", "link": "..."},
-    {"username": "@Drama_uzbsub", "link": "..."}
 ]
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-# Render porti uchun kichik web-server
+# --- RENDER UCHUN WEB SERVER ---
 async def handle(request):
-    return web.Response(text="Bot is running!")
+    return web.Response(text="Bot is running and alive!")
 
 async def start_web_server():
     app = web.Application()
@@ -34,15 +33,24 @@ async def start_web_server():
     site = web.TCPSite(runner, '0.0.0.0', port)
     await site.start()
 
-# --- BU YERDAN PASTDAGI BO'LIMGA O'ZINGIZNING MAVJUD HANDLER'LARINGIZNI / MANTIQINGIZNI QO'SHASIZ ---
+# --- BOT BUYruqlari (HANDLERS) ---
+@dp.message(Command("start"))
+async def cmd_start(message: Message):
+    await message.answer("Salom! Kinolar botiga xush kelibsiz. Kino kodini yuboring:")
 
+# Aytaylik, kino qidirish qismi yoki boshqa handler'laringiz shu yerda bo'ladi...
+# @dp.message() ...
+
+
+# --- ASOSIY FUNKSIYA ---
 async def main():
-    # Web serverni orqa fonda ishga tushirish (Render o'chib qolmasligi uchun)
-    await start_web_server()
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     
-    # Telegram bot polling
-    await dp.start_polling(bot)
+    # Web server va botni bir vaqtda ishga tushiramiz
+    await asyncio.gather(
+        start_web_server(),
+        dp.start_polling(bot)
+    )
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     asyncio.run(main())
