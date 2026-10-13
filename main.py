@@ -9,7 +9,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 # Bot parametrlari
-TOKEN = "8758162405:AAGW3krs7B5UDtub2EyRq..."  # Tokeningiz o'zi turibdi
+TOKEN = "8758162405: AAGW3krs7B5UDtub2EyRg 4LJ_qSBnGu1go8"  # Tokeningiz o'zi turibdi
 ADMIN_ID = 6522573426
 
 CHANNELS = [
